@@ -1,0 +1,38 @@
+{
+  "name": "panel-ssh-api",
+  "version": "1.0.0",
+  "description": "REST API for managing SSH, VLESS, VMESS, and Trojan users with Tripay payment integration",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "migrate": "node src/database/migrate.js",
+    "test": "echo \"No tests specified\" && exit 0"
+  },
+  "keywords": [
+    "ssh",
+    "vless",
+    "vmess",
+    "trojan",
+    "vpn",
+    "panel",
+    "api"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "express-rate-limit": "^7.1.5",
+    "dotenv": "^16.3.1",
+    "sqlite3": "^5.1.6",
+    "axios": "^1.6.2",
+    "node-telegram-bot-api": "^0.64.0",
+    "uuid": "^9.0.1",
+    "morgan": "^1.10.0",
+    "helmet": "^7.1.0",
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+}
