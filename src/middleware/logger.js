@@ -3,13 +3,30 @@ const Database = require('../database/schema');
 const logActivity = (action, details = {}) => {
   return (req, res, next) => {
     const db = new Database();
+    
+    // Sanitize request data to avoid logging sensitive information
+    const sanitizeData = (data) => {
+      if (!data) return data;
+      const sanitized = { ...data };
+      
+      // Remove sensitive fields
+      const sensitiveFields = ['password', 'api_key', 'token', 'secret', 'private_key'];
+      sensitiveFields.forEach(field => {
+        if (sanitized[field]) {
+          sanitized[field] = '[REDACTED]';
+        }
+      });
+      
+      return sanitized;
+    };
+    
     const logData = {
       action,
       user_id: details.user_id || null,
       payment_id: details.payment_id || null,
       details: JSON.stringify({
         ...details,
-        body: req.body,
+        body: sanitizeData(req.body),
         params: req.params,
         query: req.query
       }),

@@ -104,7 +104,9 @@ const createPayment = async (req, res) => {
           });
         }
 
-        // Store username and password in a temporary way (you might want to encrypt this)
+        // Store username and password temporarily for user creation after payment
+        // NOTE: In production, consider encrypting these credentials or using a separate secure storage
+        // The credentials are only needed until payment is confirmed, then the user is created
         db.connection.run(
           `UPDATE payments SET merchant_ref = ? WHERE id = ?`,
           [JSON.stringify({ username, password }), this.lastID],
@@ -179,8 +181,21 @@ const paymentCallback = async (req, res) => {
             // If payment is successful, create the user
             if (status === 'PAID') {
               try {
-                const credentials = JSON.parse(payment.merchant_ref);
+                // Parse credentials safely
+                let credentials;
+                try {
+                  credentials = JSON.parse(payment.merchant_ref);
+                } catch (parseError) {
+                  console.error('Error parsing merchant_ref:', parseError);
+                  return res.json({ success: true, message: 'Callback processed but user creation failed' });
+                }
+                
                 const { username, password } = credentials;
+                
+                if (!username) {
+                  console.error('Missing username in credentials');
+                  return res.json({ success: true, message: 'Callback processed but user creation failed' });
+                }
 
                 let userData;
                 if (payment.service_type === 'ssh') {

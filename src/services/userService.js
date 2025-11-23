@@ -13,11 +13,23 @@ class UserService {
 
   async createSSHUser(username, password, days = 30) {
     try {
-      // Create user
+      // Validate username (alphanumeric and underscore only)
+      if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+        throw new Error('Invalid username format');
+      }
+      
+      // Validate password length
+      if (!password || password.length < 6) {
+        throw new Error('Password must be at least 6 characters');
+      }
+      
+      // Create user with safe command
       await execAsync(`useradd -m -s /bin/bash ${username}`);
       
-      // Set password
-      await execAsync(`echo "${username}:${password}" | chpasswd`);
+      // Set password using echo to stdin (safer than command substitution)
+      await execAsync(`chpasswd`, {
+        input: `${username}:${password}\n`
+      });
       
       // Calculate expiry date
       const expiryDate = new Date();
@@ -41,6 +53,11 @@ class UserService {
 
   async createXrayUser(username, type, days = 30) {
     try {
+      // Validate username
+      if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+        throw new Error('Invalid username format');
+      }
+      
       const uuid = uuidv4();
       
       // Read current config
@@ -94,6 +111,11 @@ class UserService {
 
   async deleteSSHUser(username) {
     try {
+      // Validate username
+      if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+        throw new Error('Invalid username format');
+      }
+      
       await execAsync(`userdel -r ${username}`);
       return true;
     } catch (error) {
@@ -104,6 +126,11 @@ class UserService {
 
   async deleteXrayUser(username, type) {
     try {
+      // Validate username
+      if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+        throw new Error('Invalid username format');
+      }
+      
       // Read current config
       const configData = await fs.readFile(this.xrayConfigPath, 'utf8');
       const config = JSON.parse(configData);

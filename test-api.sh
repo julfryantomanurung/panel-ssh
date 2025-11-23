@@ -4,7 +4,8 @@
 # This script tests all API endpoints to ensure they're working
 
 API_BASE="http://localhost:3000"
-API_KEY="test-api-key"  # Change this to your actual API key
+# IMPORTANT: Replace with your actual API key from .env file before running tests
+API_KEY="${API_KEY:-test-api-key}"  # Set API_KEY environment variable or update this line
 
 echo "=========================================="
 echo "  VPN Panel API - Integration Test"

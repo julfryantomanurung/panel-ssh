@@ -8,6 +8,7 @@ class Database {
     this.db = new sqlite3.Database(dbPath, (err) => {
       if (err) {
         console.error('Error opening database:', err.message);
+        throw new Error(`Failed to connect to database: ${err.message}`);
       } else {
         console.log('Connected to SQLite database');
       }

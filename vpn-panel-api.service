@@ -5,6 +5,8 @@ After=network.target
 
 [Service]
 Type=simple
+# NOTE: Running as root is required for SSH user creation and Xray config modification
+# In a production environment, consider using sudo rules or capability-based security
 User=root
 WorkingDirectory=/root/panel-ssh
 ExecStart=/usr/bin/node src/server.js

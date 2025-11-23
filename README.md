@@ -363,6 +363,23 @@ Semua aktivitas dicatat di tabel `activity_logs`:
 
 Proteksi header HTTP standar untuk keamanan aplikasi web.
 
+### 5. Input Validation
+
+- Username validation: alphanumeric and underscore only
+- Password minimum length enforcement
+- Safe command execution to prevent injection
+- Sensitive data redaction in logs
+
+### 6. Security Considerations
+
+**Important Notes:**
+- Passwords stored temporarily during payment process (consider encryption for production)
+- Service runs as root for SSH user creation (required for system operations)
+- Username input is validated to prevent command injection
+- Sensitive fields are redacted from activity logs
+- Use strong, unique API keys in production
+- Regular security audits recommended
+
 ## 📊 Database Schema
 
 ### Users Table
