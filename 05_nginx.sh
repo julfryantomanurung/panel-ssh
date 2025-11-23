@@ -18,8 +18,8 @@ server {
     
     client_header_buffer_size 32k;
     large_client_header_buffers 4 32k;
-    proxy_read_timeout 3600;
-    keepalive_timeout 3600;
+    proxy_read_timeout 86400;
+    keepalive_timeout 86400;
     
     # Log Off (Hemat I/O)
     access_log off;
